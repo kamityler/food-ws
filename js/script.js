@@ -300,7 +300,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
             const r = new XMLHttpRequest();
             r.open("POST", 'server.php');
-            // r.setRequestHeader('Content-type', 'multipart/form-data');
+            // r.setRequestHeader('Content-type', 'multipart/form-data'); is not neccessery when using FormData
 
             const formData = new FormData(form);
             r.send(formData);
