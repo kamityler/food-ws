@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded", () => {
     tabsParent.addEventListener('click', (e) => {
         const target = e.target;
         if (target && target.classList.contains('tabheader__item') &&
-        !target.classList.contains('tabheader__item_active')) {
+            !target.classList.contains('tabheader__item_active')) {
             tabs.forEach((item, i) => {
                 if (target == item) {
                     startAnimation(hideTabContent, showTabContent, i, 300);
@@ -147,14 +147,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // modal window
     const openModalBtn = document.querySelectorAll('[data-modal]'),
-        closeModalBtn = document.querySelector('[data-close]'),
+        //closeModalBtn = document.querySelector('[data-close]'),
         modal = document.querySelector('.modal');
 
     function openModal() {
         modal.classList.add('show');
         modal.classList.remove('hide');
         document.body.style.overflow = 'hidden';
-        //clearInterval(modalTimerID);
+        clearInterval(modalTimerID);
     }
 
     function closeModal() {
@@ -169,12 +169,12 @@ window.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    closeModalBtn.addEventListener('click', () => {
-        closeModal();
-    });
+    // closeModalBtn.addEventListener('click', () => {
+    //     closeModal();
+    // });
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        if (e.target === modal || e.target.getAttribute('data-close') == "") {
             closeModal();
         }
     });
@@ -185,7 +185,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    //const modalTimerID = setTimeout(openModal, 2000);
+    const modalTimerID = setTimeout(openModal, 50000);
 
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1) {
@@ -281,7 +281,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const forms = document.querySelectorAll('form');
     const message = {
-        loading: 'загрузка',
+        loading: 'img/spinner.svg',
         success: 'успіх',
         failure: 'невдача'
     };
@@ -293,22 +293,24 @@ window.addEventListener("DOMContentLoaded", () => {
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const statusMessage = document.createElement('div');
-            statusMessage.classList.add('status');
-            statusMessage.textContent = message.loading;
-            form.append(statusMessage);
+            const statusMessage = document.createElement('img');
+            statusMessage.src = message.loading;
+            statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+            //form.append(statusMessage);
+            form.insertAdjacentElement('afterend',statusMessage);
 
             const r = new XMLHttpRequest();
             r.open("POST", 'server.php');
             // r.setRequestHeader('Content-type', 'multipart/form-data'); is not neccessery when using FormData
             r.setRequestHeader('Content-type', 'application/json');
 
-
-
             const formData = new FormData(form);
-
             const object = {};
-            formData.forEach(function(value,key){
+
+            formData.forEach(function (value, key) {
                 object[key] = value;
             });
             const json = JSON.stringify(object);
@@ -317,23 +319,40 @@ window.addEventListener("DOMContentLoaded", () => {
             r.addEventListener('load', () => {
                 if (r.status === 200) {
                     console.log(r.response);
-                    statusMessage.textContent = message.success;
+                    showMyModal(message.success);
+                    statusMessage.remove();
                     form.reset();
-                    setTimeout(()=>{
-                        statusMessage.remove();
-                    },2000);
                 } else {
-                    statusMessage.textContent = message.failure;
+                    showMyModal(message.failure);
                 }
             });
         });
+    }
+
+    function showMyModal(message) {
+        const prevModal = document.querySelector('.modal__dialog');
+        prevModal.classList.add('hide');
+        openModal();
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+            <div class="modal__content">
+                <div class="modal__close" data-close>×</div>
+                <div class="modal__title">${message}</div>
+            </div>
+        `;
+        document.querySelector('.modal').append(thanksModal);
+        setTimeout(() => {
+            thanksModal.remove();
+            prevModal.classList.add('show');
+            prevModal.classList.remove('hide');
+            closeModal();
+        }, 4000);
     }
 
 
 
 
 
-
+    //end   
 });
-
-//end
