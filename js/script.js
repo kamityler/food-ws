@@ -27,7 +27,6 @@ window.addEventListener("DOMContentLoaded", () => {
     function startAnimation(funcHide, funcShow, n, sec) {
         tabsContent.forEach((tab, i) => {
             if (tab.classList.contains('show')) {
-                console.log('hello');
                 tab.classList.add('fadeLow');
             }
             setTimeout(function () {
@@ -299,33 +298,33 @@ window.addEventListener("DOMContentLoaded", () => {
                 display: block;
                 margin: 0 auto;
             `;
-            //form.append(statusMessage);
-            form.insertAdjacentElement('afterend',statusMessage);
-
-            const r = new XMLHttpRequest();
-            r.open("POST", 'server.php');
-            // r.setRequestHeader('Content-type', 'multipart/form-data'); is not neccessery when using FormData
-            r.setRequestHeader('Content-type', 'application/json');
+            form.insertAdjacentElement('afterend', statusMessage);
 
             const formData = new FormData(form);
-            const object = {};
 
+            const object = {};
             formData.forEach(function (value, key) {
                 object[key] = value;
             });
-            const json = JSON.stringify(object);
 
-            r.send(json);
-            r.addEventListener('load', () => {
-                if (r.status === 200) {
-                    console.log(r.response);
+            fetch('serv3er.php', {
+                    method: 'POST', // лапки
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                })
+                .then(data => data.text())
+                .then(data => {
+                    console.log(data);
                     showMyModal(message.success);
                     statusMessage.remove();
-                    form.reset();
-                } else {
+                }).catch(() => {
                     showMyModal(message.failure);
-                }
-            });
+                }).finally(() => {
+                    form.reset();
+                });
+
         });
     }
 
