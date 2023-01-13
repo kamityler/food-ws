@@ -1,0 +1,22 @@
+{
+  "name": "practice_38_food",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamityler/food-ws.git"
+  },
+  "author": "Danylo Bodnar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kamityler/food-ws/issues"
+  },
+  "homepage": "https://github.com/kamityler/food-ws#readme",
+  "devDependencies": {
+    "json-server": "^0.17.1"
+  }
+}
