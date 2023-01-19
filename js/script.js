@@ -194,6 +194,9 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     window.addEventListener('scroll', showModalByScroll);
 
+    startAnimation(hideTabContent, showTabContent, 0, 0);
+    setClock('.timer', deadline);
+
     // food cards
 
     class FoodCard {
@@ -241,41 +244,59 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    new FoodCard(
-        'img/tabs/vegy.jpg',
-        'vegy',
-        'Меню "Фітнес"',
-        'Меню "Фітнес" - це новий підхід до приготування страв: більше свіжих овочів та фруктів. Продукт активних та здорових людей. Це абсолютно новий продукт з оптимальною ціною і високою якістю!',
-        9,
-        '.menu .container',
-        // 'menu__item',
-        // 'big'
+    const getResources = async (url) => {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        }
+        return await res.json();
+    };
 
-    ).render();
+    getResources('http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({
+                img,
+                altimg,
+                title,
+                descr,
+                price
+            }) => {
+                new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
+            });
+        });
 
-    new FoodCard(
-        'img/tabs/elite.jpg',
-        'elite',
-        'Меню “Преміум”',
-        'Меню “Преміум” - ми використовуємо не тільки красивий дизайн упаковки, але й якісне виконання страв. Червона риба, морепродукти, фрукти - ресторанне меню без походу в ресторан!',
-        20,
-        '.menu .container',
-        'menu__item'
-    ).render();
+    // getResources('http://localhost:3000/menu')
+    //     .then(data => createCard(data));
 
-    new FoodCard(
-        'img/tabs/post.jpg',
-        'post',
-        'Меню "Пісне"',
-        'Меню “Пісне” - це ретельний підбір інгредієнтів: повна відсутність продуктів тваринного походження, мигдалеве молоко, вівса, кокоса чи гречки, правильна кількість білків за рахунок тофу та імпортних вегетаріанських стейків.',
-        16,
-        '.menu .container',
-        'menu__item'
-    ).render();
-
-    startAnimation(hideTabContent, showTabContent, 0, 0);
-    setClock('.timer', deadline);
-
+    // function createCard(data) {
+    //     data.forEach(({
+    //         img,
+    //         altimg,
+    //         title,
+    //         descr,
+    //         price
+    //     }) => {
+    //         const element = document.createElement('div');
+    //         element.classList.add('menu__item');
+    //         element.innerHTML = `
+    //         <img src=${img} alt=${altimg}>
+    //         <h3 class="menu__item-subtitle">
+    //             ${title}
+    //         </h3>
+    //         <div class="menu__item-descr">
+    //             ${descr}
+    //         </div>
+    //         <div class="menu__item-divider"></div>
+    //         <div class="menu__item-price">
+    //             <div class="menu__item-cost">Ціна:</div>
+    //             <div class="menu__item-total">
+    //                 <span>${price}</span>грн/день
+    //             </div>
+    //         </div>
+    //         `;
+    //         document.querySelector('.menu .container').append(element);
+    //     });
+    // }
     //Forms
 
     const forms = document.querySelectorAll('form');
