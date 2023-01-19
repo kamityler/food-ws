@@ -252,18 +252,30 @@ window.addEventListener("DOMContentLoaded", () => {
         return await res.json();
     };
 
-    getResources('http://localhost:3000/menu')
-        .then(data => {
-            data.forEach(({
-                img,
-                altimg,
-                title,
-                descr,
-                price
-            }) => {
-                new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
-            });
+    // getResources('http://localhost:3000/menu')
+    //     .then(data => {
+    //         data.forEach(({
+    //             img,
+    //             altimg,
+    //             title,
+    //             descr,
+    //             price
+    //         }) => {
+    //             new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
+    //         });
+    //     });
+
+    axios.get('http://localhost:3000/menu').then(obj => {
+        obj.data.forEach(({
+            img,
+            altimg,
+            title,
+            descr,
+            price
+        }) => {
+            new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
         });
+    });
 
     // getResources('http://localhost:3000/menu')
     //     .then(data => createCard(data));
@@ -297,6 +309,8 @@ window.addEventListener("DOMContentLoaded", () => {
     //         document.querySelector('.menu .container').append(element);
     //     });
     // }
+
+
     //Forms
 
     const forms = document.querySelectorAll('form');
@@ -371,8 +385,6 @@ window.addEventListener("DOMContentLoaded", () => {
             closeModal();
         }, 4000);
     }
-
-    fetch('db.json').then(data => data.json()).then(res => console.log(res));
 
     //end   
 });
