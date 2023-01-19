@@ -314,12 +314,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach((value, key) => {
-                object[key] = value;
-            });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            postData('http://localhost:3000/requests', JSON.stringify(object))
+            postData('http://localhost:3000/requests', json)
                 .then(data => {
                     console.log(data);
                     showMyModal(message.success);
