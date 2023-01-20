@@ -153,7 +153,7 @@ window.addEventListener("DOMContentLoaded", () => {
         modal.classList.add('show');
         modal.classList.remove('hide');
         document.body.style.overflow = 'hidden';
-        clearInterval(modalTimerID);
+        //clearInterval(modalTimerID);
     }
 
     function closeModal() {
@@ -184,7 +184,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    const modalTimerID = setTimeout(openModal, 50000);
+    //const modalTimerID = setTimeout(openModal, 50000);
 
     function showModalByScroll() {
         if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1) {
@@ -384,6 +384,55 @@ window.addEventListener("DOMContentLoaded", () => {
             prevModal.classList.remove('hide');
             closeModal();
         }, 4000);
+    }
+
+    //slider
+
+    let sliderCounter = 1;
+    let sliderCounterMax = 0; 
+    axios.get("http://localhost:3000/slides").then(data => sliderCounterMax = data.data.length).then(()=>console.log(sliderCounterMax));
+    
+    const slider = document.querySelector('.offer__slider');
+
+    slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
+    axios.get("http://localhost:3000/slides")
+        .then(i => slider.querySelector('#total').innerHTML =
+            i.data.length < 10 ? '0' + i.data.length : i.data.length)
+        .catch();
+    
+        
+    slider.querySelector('.offer__slider-next').addEventListener('click', () => {
+        
+        sliderCounter++;
+        if(changeImage(sliderCounter)){
+            sliderCounter = 1;
+        }
+        changeImage(sliderCounter);
+        slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
+    });
+
+    function changeImage(id) {
+        axios.get("http://localhost:3000/slides")
+        .then(data => {
+            let i = 1;
+            data.data.forEach(item => {
+                if (item.id != id) {
+                    i++;
+                }
+            });
+            if (i > data.data.length) {
+                id=1;
+            }
+            data.data.forEach(item => {
+                if (item.id == id) {
+                    slider.querySelector('.offer__slide').innerHTML = `
+                        <img src="${item.img}" alt="${item.alt}">
+                    `;
+                    return true;
+                }
+                else { return false; }
+            });
+        }).catch(() => console.error('no item'));
     }
 
     //end   
