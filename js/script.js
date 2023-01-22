@@ -387,53 +387,102 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     //slider
+    const sliderGlobal = document.querySelector('.offer__slider'),
+        prevButton = sliderGlobal.querySelector('.offer__slider-prev'),
+        nextButton = sliderGlobal.querySelector('.offer__slider-next'),
+        curSlide = sliderGlobal.querySelector('#current'),
+        totSlide = sliderGlobal.querySelector('#total'),
+        imgSlide = sliderGlobal.querySelector('.offer__slide');
 
-    let sliderCounter = 1;
-    let sliderCounterMax = 0; 
-    axios.get("http://localhost:3000/slides").then(data => sliderCounterMax = data.data.length).then(()=>console.log(sliderCounterMax));
-    
-    const slider = document.querySelector('.offer__slider');
-
-    slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
-    axios.get("http://localhost:3000/slides")
-        .then(i => slider.querySelector('#total').innerHTML =
-            i.data.length < 10 ? '0' + i.data.length : i.data.length)
-        .catch();
-    
-        
-    slider.querySelector('.offer__slider-next').addEventListener('click', () => {
-        
-        sliderCounter++;
-        if(changeImage(sliderCounter)){
-            sliderCounter = 1;
-        }
-        changeImage(sliderCounter);
-        slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
+    prevButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        axios.get('http://localhost:3000/slides').then(item => item.data.forEach((i,index) => {
+            i.vis = 'true';
+            axios.put(`http://localhost:3000/slides/${1}`, i);
+        }));
     });
 
-    function changeImage(id) {
-        axios.get("http://localhost:3000/slides")
-        .then(data => {
-            let i = 1;
-            data.data.forEach(item => {
-                if (item.id != id) {
-                    i++;
+    nextButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        axios.get('http://localhost:3000/slides').
+        then(item => {
+            let counter;
+            item.data.forEach(i => {
+                if (i.vis == 'true') {
+                    counter = i.id;
                 }
             });
-            if (i > data.data.length) {
-                id=1;
+            counter++;
+            if (counter > item.data.length) {
+                counter = item.data[0].id;
             }
-            data.data.forEach(item => {
-                if (item.id == id) {
-                    slider.querySelector('.offer__slide').innerHTML = `
-                        <img src="${item.img}" alt="${item.alt}">
-                    `;
-                    return true;
+            item.data.forEach(i => {
+                if (i.id == counter) {
+                    i.vis = 'true';
+                    console.log(counter);
+                    axios.put(`http://localhost:3000/slides/${counter}`, i).then(item => console.log(item.data));
+                    imgSlide.innerHTML = `<img src="${i.img}" alt="${i.alt}">`;
+
+                } else {
+                    i.vis = 'false';
+                    axios.put(`http://localhost:3000/slides/${counter}`, i);
                 }
-                else { return false; }
             });
-        }).catch(() => console.error('no item'));
-    }
+
+        });
+    });
+
+    //     slider.querySelector('.offer__slide').innerHTML = `
+    //     <img src="${item.img}" alt="${item.alt}">
+    // `;
+
+
+    // let sliderCounter = 1;
+
+
+    // const slider = document.querySelector('.offer__slider');
+
+    // slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
+    // axios.get("http://localhost:3000/slides")
+    //     .then(i => slider.querySelector('#total').innerHTML =
+    //         i.data.length < 10 ? '0' + i.data.length : i.data.length)
+    //     .catch();
+
+
+    // slider.querySelector('.offer__slider-next').addEventListener('click', () => {
+
+    //     sliderCounter++;
+    //     if (changeImage(sliderCounter)) {
+    //         sliderCounter = 1;
+    //     }
+    //     changeImage(sliderCounter);
+    //     slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
+    // });
+
+    // function changeImage(id) {
+    //     axios.get("http://localhost:3000/slides")
+    //         .then(data => {
+    //             let i = 1;
+    //             data.data.forEach(item => {
+    //                 if (item.id != id) {
+    //                     i++;
+    //                 }
+    //             });
+    //             if (i > data.data.length) {
+    //                 id = 1;
+    //             }
+    //             data.data.forEach(item => {
+    //                 if (item.id == id) {
+    //                     slider.querySelector('.offer__slide').innerHTML = `
+    //                     <img src="${item.img}" alt="${item.alt}">
+    //                 `;
+    //                     return true;
+    //                 } else {
+    //                     return false;
+    //                 }
+    //             });
+    //         }).catch(() => console.error('no item'));
+    // }
 
     //end   
 });
