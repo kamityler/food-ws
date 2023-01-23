@@ -24,7 +24,7 @@
   ],
   "slides": [
     {
-      "img": "img/slider/pepper.jpg",
+      "img": "img/slider/food-12.jpg",
       "alt": "food",
       "id": 1,
       "vis": "true"
@@ -45,7 +45,7 @@
       "img": "img/slider/pepper.jpg",
       "alt": "food",
       "id": 4,
-      "vis": "true"
+      "vis": "false"
     }
   ],
   "requests": [
