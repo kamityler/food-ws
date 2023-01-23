@@ -394,12 +394,46 @@ window.addEventListener("DOMContentLoaded", () => {
         totSlide = sliderGlobal.querySelector('#total'),
         imgSlide = sliderGlobal.querySelector('.offer__slide');
 
-    prevButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        axios.get('http://localhost:3000/slides').then(item => console.log(item.data));
+    axios.get('http://localhost:3000/slides')
+        .then(item => {
+            totSlide.textContent = item.data.length > 10 ? item.data.length : '0' + item.data.length
+            item.data.forEach(i => {
+                if (i.vis == 'true') {
+                    imgSlide.innerHTML = `<img src=${i.img} alt=${i.alt}/>`;
+                    curSlide.textContent = i.id > 10 ? i.id : '0' + i.id;
+                }
+            });
+        });
 
+    prevButton.addEventListener('click', async (e) => {
+        let obj;
+        await axios.get('http://localhost:3000/slides').then(item => obj = item.data);
+        let counter = 0;
+        await obj.forEach(item => {
+            if (item.vis == 'true') {
+                counter = (item.id - 1) < 1 ? 4 : item.id - 1;
+            }
+        });
+        await obj.forEach(async item => {
+            if (item.id == counter) {
+                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                    'img': item.img,
+                    'alt': item.alt,
+                    'id': item.id,
+                    'vis': 'true'
+                });
+                imgSlide.innerHTML = `<img src=${item.img} alt=${item.alt}/>`;
+                curSlide.textContent = item.id > 10 ? item.id : '0' + item.id;
+            } else {
+                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                    'img': item.img,
+                    'alt': item.alt,
+                    'id': item.id,
+                    'vis': 'false'
+                });
+            }
+        });
     });
-
 
     nextButton.addEventListener('click', async (e) => {
         let obj;

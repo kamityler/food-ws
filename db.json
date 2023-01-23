@@ -27,13 +27,13 @@
       "img": "img/slider/food-12.jpg",
       "alt": "food",
       "id": 1,
-      "vis": "true"
+      "vis": "false"
     },
     {
       "img": "img/slider/olive-oil.jpg",
       "alt": "food",
       "id": 2,
-      "vis": "false"
+      "vis": "true"
     },
     {
       "img": "img/slider/paprika.jpg",
