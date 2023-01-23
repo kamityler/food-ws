@@ -24,28 +24,28 @@
   ],
   "slides": [
     {
-      "img": "img/slider/food-12.jpg",
+      "img": "img/slider/pepper.jpg",
       "alt": "food",
       "id": 1,
       "vis": "true"
     },
     {
-      "img": "img/slider/food-12.jpg",
+      "img": "img/slider/olive-oil.jpg",
       "alt": "food",
       "id": 2,
-      "vis": "true"
+      "vis": "false"
     },
     {
-      "img": "img/slider/food-12.jpg",
+      "img": "img/slider/paprika.jpg",
       "alt": "food",
       "id": 3,
-      "vis": "true"
+      "vis": "false"
     },
     {
-      "img": "img/slider/food-12.jpg",
+      "img": "img/slider/pepper.jpg",
       "alt": "food",
       "id": 4,
-      "vis": "false"
+      "vis": "true"
     }
   ],
   "requests": [

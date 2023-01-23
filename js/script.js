@@ -396,49 +396,46 @@ window.addEventListener("DOMContentLoaded", () => {
 
     prevButton.addEventListener('click', (e) => {
         e.preventDefault();
-        axios.get('http://localhost:3000/slides').then(item => item.data.forEach((i,index) => {
-            i.vis = 'true';
-            axios.put(`http://localhost:3000/slides/${1}`, i);
-        }));
+        axios.get('http://localhost:3000/slides').then(item => console.log(item.data));
     });
 
-    nextButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        axios.get('http://localhost:3000/slides').
-        then(item => {
-            let counter;
-            item.data.forEach(i => {
-                if (i.vis == 'true') {
-                    counter = i.id;
-                }
-            });
-            counter++;
-            if (counter > item.data.length) {
-                counter = item.data[0].id;
-            }
-            item.data.forEach(i => {
-                if (i.id == counter) {
-                    i.vis = 'true';
-                    console.log(counter);
-                    axios.put(`http://localhost:3000/slides/${counter}`, i).then(item => console.log(item.data));
-                    imgSlide.innerHTML = `<img src="${i.img}" alt="${i.alt}">`;
 
-                } else {
-                    i.vis = 'false';
-                    axios.put(`http://localhost:3000/slides/${counter}`, i);
-                }
-            });
-
+    nextButton.addEventListener('click', async (e) => {
+        let obj;
+        await axios.get('http://localhost:3000/slides').then(item => {
+            obj = item.data;
         });
+        let counter = 0;
+        await obj.forEach(async item => {
+            if (item.vis != 'false') {
+                counter = (item.id + 1) > obj.length ? item.id = 1 : item.id + 1;
+                console.log(counter);
+                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                    'img': item.img,
+                    'alt': item.alt,
+                    'id': item.id,
+                    'vis': 'false'
+                });
+            }
+        });
+        await obj.forEach(async item => {
+            if (item.id == counter) {
+                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                    'img': item.img,
+                    'alt': item.alt,
+                    'id': item.id,
+                    'vis': 'true'
+                });
+            }
+        });
+
+
     });
 
-    //     slider.querySelector('.offer__slide').innerHTML = `
-    //     <img src="${item.img}" alt="${item.alt}">
-    // `;
+
 
 
     // let sliderCounter = 1;
-
 
     // const slider = document.querySelector('.offer__slider');
 
