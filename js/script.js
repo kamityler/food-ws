@@ -244,13 +244,13 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const getResources = async (url) => {
-        const res = await fetch(url);
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
-        return await res.json();
-    };
+    // const getResources = async (url) => {
+    //     const res = await fetch(url);
+    //     if (!res.ok) {
+    //         throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+    //     }
+    //     return await res.json();
+    // };
 
     // getResources('http://localhost:3000/menu')
     //     .then(data => {
@@ -265,6 +265,7 @@ window.addEventListener("DOMContentLoaded", () => {
     //         });
     //     });
 
+    /*
     axios.get('http://localhost:3000/menu').then(obj => {
         obj.data.forEach(({
             img,
@@ -275,7 +276,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }) => {
             new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
         });
-    });
+    });*/
 
     // getResources('http://localhost:3000/menu')
     //     .then(data => createCard(data));
@@ -386,7 +387,8 @@ window.addEventListener("DOMContentLoaded", () => {
         }, 4000);
     }
 
-    //slider
+    //slider 
+
     const sliderGlobal = document.querySelector('.offer__slider'),
         prevButton = sliderGlobal.querySelector('.offer__slider-prev'),
         nextButton = sliderGlobal.querySelector('.offer__slider-next'),
@@ -394,20 +396,104 @@ window.addEventListener("DOMContentLoaded", () => {
         totSlide = sliderGlobal.querySelector('#total'),
         imgSlide = sliderGlobal.querySelector('.offer__slide');
 
-    axios.get('http://localhost:3000/slides')
-        .then(item => {
-            totSlide.textContent = item.data.length > 10 ? item.data.length : '0' + item.data.length
-            item.data.forEach(i => {
-                if (i.vis == 'true') {
-                    imgSlide.innerHTML = `<img src=${i.img} alt=${i.alt}/>`;
-                    curSlide.textContent = i.id > 10 ? i.id : '0' + i.id;
-                }
-            });
+    // axios.get('http://localhost:3000/slides')
+    //     .then(item => {
+    //         totSlide.textContent = item.data.length > 10 ? item.data.length : '0' + item.data.length
+    //         item.data.forEach(i => {
+    //             if (i.vis == 'true') {
+    //                 imgSlide.innerHTML = `<img src=${i.img} alt=${i.alt}/>`;
+    //                 curSlide.textContent = i.id > 10 ? i.id : '0' + i.id;
+    //             }
+    //         });
+    //     });
+
+    // prevButton.addEventListener('click', async (e) => {
+    //     let obj;
+    //     await axios.get('http://localhost:3000/slides').then(item => obj = item.data);
+    //     let counter = 0;
+    //     await obj.forEach(item => {
+    //         if (item.vis == 'true') {
+    //             counter = (item.id - 1) < 1 ? 4 : item.id - 1;
+    //         }
+    //     });
+    //     await obj.forEach(async item => {
+    //         if (item.id == counter) {
+    //             await axios.put(`http://localhost:3000/slides/${item.id}`, {
+    //                 'img': item.img,
+    //                 'alt': item.alt,
+    //                 'id': item.id,
+    //                 'vis': 'true'
+    //             });
+    //             imgSlide.innerHTML = `<img src=${item.img} alt=${item.alt}/>`;
+    //             curSlide.textContent = item.id > 10 ? item.id : '0' + item.id;
+    //         } else {
+    //             await axios.put(`http://localhost:3000/slides/${item.id}`, {
+    //                 'img': item.img,
+    //                 'alt': item.alt,
+    //                 'id': item.id,
+    //                 'vis': 'false'
+    //             });
+    //         }
+    //     });
+    // });
+
+    // nextButton.addEventListener('click', async (e) => {
+    //     let obj;
+    //     await axios.get('http://localhost:3000/slides').then(item => obj = item.data);
+    //     let counter = 0;
+    //     await obj.forEach(item => {
+    //         if (item.vis == 'true') {
+    //             counter = (item.id + 1) > obj.length ? 1 : item.id + 1;
+    //         }
+    //     });
+    //     await obj.forEach(async item => {
+    //         if (item.id == counter) {
+    //             await axios.put(`http://localhost:3000/slides/${item.id}`, {
+    //                 'img': item.img,
+    //                 'alt': item.alt,
+    //                 'id': item.id,
+    //                 'vis': 'true'
+    //             });
+    //             imgSlide.innerHTML = `<img src=${item.img} alt=${item.alt}/>`;
+    //             curSlide.textContent = item.id > 10 ? item.id : '0' + item.id;
+    //         } else {
+    //             await axios.put(`http://localhost:3000/slides/${item.id}`, {
+    //                 'img': item.img,
+    //                 'alt': item.alt,
+    //                 'id': item.id,
+    //                 'vis': 'false'
+    //             });
+    //         }
+    //     });
+    // });
+
+    //slider2
+
+
+
+    const getResources = async (url) => {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
+        }
+        let obj = await res.json();
+        return await obj;
+    };
+
+    let objWithSlides = getResources('http://localhost:3000/slides').then(async data => {
+        totSlide.textContent = data.length > 10 ? data.length : '0' + data.length;
+        data.forEach(i => {
+            if (i.vis == 'true') {
+                imgSlide.innerHTML = `<img src=${i.img} alt=${i.alt}/>`;
+                curSlide.textContent = i.id > 10 ? i.id : '0' + i.id;
+            }
         });
+        return await data;
+    });
 
     prevButton.addEventListener('click', async (e) => {
         let obj;
-        await axios.get('http://localhost:3000/slides').then(item => obj = item.data);
+        await objWithSlides.then(data => obj = data);
         let counter = 0;
         await obj.forEach(item => {
             if (item.vis == 'true') {
@@ -416,28 +502,28 @@ window.addEventListener("DOMContentLoaded", () => {
         });
         await obj.forEach(async item => {
             if (item.id == counter) {
-                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                obj[item.id - 1] = {
                     'img': item.img,
                     'alt': item.alt,
                     'id': item.id,
                     'vis': 'true'
-                });
+                };
                 imgSlide.innerHTML = `<img src=${item.img} alt=${item.alt}/>`;
                 curSlide.textContent = item.id > 10 ? item.id : '0' + item.id;
             } else {
-                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                obj[item.id - 1] = {
                     'img': item.img,
                     'alt': item.alt,
                     'id': item.id,
                     'vis': 'false'
-                });
+                };
             }
         });
     });
 
     nextButton.addEventListener('click', async (e) => {
         let obj;
-        await axios.get('http://localhost:3000/slides').then(item => obj = item.data);
+        await objWithSlides.then(data => obj = data);
         let counter = 0;
         await obj.forEach(item => {
             if (item.vis == 'true') {
@@ -446,73 +532,24 @@ window.addEventListener("DOMContentLoaded", () => {
         });
         await obj.forEach(async item => {
             if (item.id == counter) {
-                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                obj[item.id - 1] = {
                     'img': item.img,
                     'alt': item.alt,
                     'id': item.id,
                     'vis': 'true'
-                });
+                };
                 imgSlide.innerHTML = `<img src=${item.img} alt=${item.alt}/>`;
                 curSlide.textContent = item.id > 10 ? item.id : '0' + item.id;
             } else {
-                await axios.put(`http://localhost:3000/slides/${item.id}`, {
+                obj[item.id - 1] = {
                     'img': item.img,
                     'alt': item.alt,
                     'id': item.id,
                     'vis': 'false'
-                });
+                };
             }
         });
     });
-
-
-
-
-    // let sliderCounter = 1;
-
-    // const slider = document.querySelector('.offer__slider');
-
-    // slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
-    // axios.get("http://localhost:3000/slides")
-    //     .then(i => slider.querySelector('#total').innerHTML =
-    //         i.data.length < 10 ? '0' + i.data.length : i.data.length)
-    //     .catch();
-
-
-    // slider.querySelector('.offer__slider-next').addEventListener('click', () => {
-
-    //     sliderCounter++;
-    //     if (changeImage(sliderCounter)) {
-    //         sliderCounter = 1;
-    //     }
-    //     changeImage(sliderCounter);
-    //     slider.querySelector('#current').innerHTML = sliderCounter < 10 ? '0' + sliderCounter : sliderCounter;
-    // });
-
-    // function changeImage(id) {
-    //     axios.get("http://localhost:3000/slides")
-    //         .then(data => {
-    //             let i = 1;
-    //             data.data.forEach(item => {
-    //                 if (item.id != id) {
-    //                     i++;
-    //                 }
-    //             });
-    //             if (i > data.data.length) {
-    //                 id = 1;
-    //             }
-    //             data.data.forEach(item => {
-    //                 if (item.id == id) {
-    //                     slider.querySelector('.offer__slide').innerHTML = `
-    //                     <img src="${item.img}" alt="${item.alt}">
-    //                 `;
-    //                     return true;
-    //                 } else {
-    //                     return false;
-    //                 }
-    //             });
-    //         }).catch(() => console.error('no item'));
-    // }
 
     //end   
 });

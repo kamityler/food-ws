@@ -27,13 +27,13 @@
       "img": "img/slider/food-12.jpg",
       "alt": "food",
       "id": 1,
-      "vis": "false"
+      "vis": "true"
     },
     {
       "img": "img/slider/olive-oil.jpg",
       "alt": "food",
       "id": 2,
-      "vis": "true"
+      "vis": "false"
     },
     {
       "img": "img/slider/paprika.jpg",
@@ -68,11 +68,6 @@
       "name": "Вікторія",
       "phone": "+380994891042",
       "id": 4
-    },
-    {
-      "name": "Данило",
-      "phone": "+380974214009",
-      "id": 5
     }
   ]
 }
