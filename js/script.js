@@ -3,6 +3,7 @@
 
 window.addEventListener("DOMContentLoaded", () => {
 
+    
     // tabs
     const tabs = document.querySelectorAll('.tabheader__item'),
         tabsContent = document.querySelectorAll('.tabcontent'),
@@ -244,28 +245,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // const getResources = async (url) => {
-    //     const res = await fetch(url);
-    //     if (!res.ok) {
-    //         throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-    //     }
-    //     return await res.json();
-    // };
-
-    // getResources('http://localhost:3000/menu')
-    //     .then(data => {
-    //         data.forEach(({
-    //             img,
-    //             altimg,
-    //             title,
-    //             descr,
-    //             price
-    //         }) => {
-    //             new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
-    //         });
-    //     });
-
-    /*
     axios.get('http://localhost:3000/menu').then(obj => {
         obj.data.forEach(({
             img,
@@ -276,41 +255,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }) => {
             new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
         });
-    });*/
-
-    // getResources('http://localhost:3000/menu')
-    //     .then(data => createCard(data));
-
-    // function createCard(data) {
-    //     data.forEach(({
-    //         img,
-    //         altimg,
-    //         title,
-    //         descr,
-    //         price
-    //     }) => {
-    //         const element = document.createElement('div');
-    //         element.classList.add('menu__item');
-    //         element.innerHTML = `
-    //         <img src=${img} alt=${altimg}>
-    //         <h3 class="menu__item-subtitle">
-    //             ${title}
-    //         </h3>
-    //         <div class="menu__item-descr">
-    //             ${descr}
-    //         </div>
-    //         <div class="menu__item-divider"></div>
-    //         <div class="menu__item-price">
-    //             <div class="menu__item-cost">Ціна:</div>
-    //             <div class="menu__item-total">
-    //                 <span>${price}</span>грн/день
-    //             </div>
-    //         </div>
-    //         `;
-    //         document.querySelector('.menu .container').append(element);
-    //     });
-    // }
-
+    });
 
     //Forms
 
@@ -394,7 +339,12 @@ window.addEventListener("DOMContentLoaded", () => {
         nextButton = sliderGlobal.querySelector('.offer__slider-next'),
         curSlide = sliderGlobal.querySelector('#current'),
         totSlide = sliderGlobal.querySelector('#total'),
-        imgSlide = sliderGlobal.querySelector('.offer__slide');
+        imgSlide = sliderGlobal.querySelector('.offer__slide'),
+        imgsSlide = sliderGlobal.querySelectorAll('.offer__slide');  
+        
+    imgSlide.classList.remove('hide');
+
+    //slider 1 *********************************************************************************************************
 
     // axios.get('http://localhost:3000/slides')
     //     .then(item => {
@@ -467,10 +417,8 @@ window.addEventListener("DOMContentLoaded", () => {
     //     });
     // });
 
-    //slider2
-
-
-
+    //slider 2 *********************************************************************************************************
+    
     const getResources = async (url) => {
         const res = await fetch(url);
         if (!res.ok) {
@@ -492,42 +440,24 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     prevButton.addEventListener('click', async (e) => {
-        let obj;
-        await objWithSlides.then(data => obj = data);
-        let counter = 0;
-        await obj.forEach(item => {
-            if (item.vis == 'true') {
-                counter = (item.id - 1) < 1 ? 4 : item.id - 1;
-            }
-        });
-        await obj.forEach(async item => {
-            if (item.id == counter) {
-                obj[item.id - 1] = {
-                    'img': item.img,
-                    'alt': item.alt,
-                    'id': item.id,
-                    'vis': 'true'
-                };
-                imgSlide.innerHTML = `<img src=${item.img} alt=${item.alt}/>`;
-                curSlide.textContent = item.id > 10 ? item.id : '0' + item.id;
-            } else {
-                obj[item.id - 1] = {
-                    'img': item.img,
-                    'alt': item.alt,
-                    'id': item.id,
-                    'vis': 'false'
-                };
-            }
-        });
+        changeSlides();
     });
 
     nextButton.addEventListener('click', async (e) => {
+        changeSlides('true');
+    });
+
+    async function changeSlides(boolean){
         let obj;
         await objWithSlides.then(data => obj = data);
         let counter = 0;
         await obj.forEach(item => {
             if (item.vis == 'true') {
+                if(boolean == 'true'){
                 counter = (item.id + 1) > obj.length ? 1 : item.id + 1;
+                } else {
+                    counter = (item.id - 1) < 1 ? 4 : item.id - 1;
+                }
             }
         });
         await obj.forEach(async item => {
@@ -549,7 +479,11 @@ window.addEventListener("DOMContentLoaded", () => {
                 };
             }
         });
-    });
+    }
+
+    //slider 3 *********************************************************************************************************
+    
+
 
     //end   
 });

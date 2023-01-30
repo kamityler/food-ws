@@ -18,5 +18,8 @@
   "homepage": "https://github.com/kamityler/food-ws#readme",
   "devDependencies": {
     "json-server": "^0.17.1"
+  },
+  "dependencies": {
+    "axios": "^1.2.6"
   }
 }
