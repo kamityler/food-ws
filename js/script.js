@@ -334,13 +334,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
     //slider 
 
-    const sliderGlobal = document.querySelector('.offer__slider'),
-        prevButton = sliderGlobal.querySelector('.offer__slider-prev'),
-        nextButton = sliderGlobal.querySelector('.offer__slider-next'),
-        curSlide = sliderGlobal.querySelector('#current'),
-        totSlide = sliderGlobal.querySelector('#total'),
-        imgSlide = sliderGlobal.querySelector('.offer__slide'),
-        imgsSlide = sliderGlobal.querySelectorAll('.offer__slide'),
+    const slider = document.querySelector('.offer__slider'),
+        prevButton = slider.querySelector('.offer__slider-prev'),
+        nextButton = slider.querySelector('.offer__slider-next'),
+        curSlide = slider.querySelector('#current'),
+        totSlide = slider.querySelector('#total'),
+        imgSlide = slider.querySelector('.offer__slide'),
+        slides = slider.querySelectorAll('.offer__slide'),
         slidesWrapper = document.querySelector('.offer__slider-wrapper'),
         slidesField = document.querySelector('.offer__slider-inner'),
         width = window.getComputedStyle(slidesWrapper).width;
@@ -492,21 +492,21 @@ window.addEventListener("DOMContentLoaded", () => {
     //slider 3 *********************************************************************************************************
     /*
     showSlides(slideIndex);
-    totSlide.textContent = imgsSlide.length > 9 ? imgsSlide.length : `0${imgsSlide.length}`;
+    totSlide.textContent = slides.length > 9 ? slides.length : `0${slides.length}`;
 
     function showSlides(n) {
 
-        if (n > imgsSlide.length) {
+        if (n > slides.length) {
             slideIndex = 1;
         }
         if (n < 1) {
-            slideIndex = imgsSlide.length;
+            slideIndex = slides.length;
         }
-        imgsSlide.forEach(item => {
+        slides.forEach(item => {
             item.style.display = 'none';
         });
         console.log(slideIndex);
-        imgsSlide[slideIndex - 1].style.display = 'block';
+        slides[slideIndex - 1].style.display = 'block';
         curSlide.textContent = slideIndex > 9 ? slideIndex : `0${slideIndex}`;
 
     }
@@ -522,60 +522,131 @@ window.addEventListener("DOMContentLoaded", () => {
 
     //slider 4 *********************************************************************************************************
 
-    if (imgsSlide.length < 10) {
-        totSlide.textContent = `0${imgsSlide.length}`;
+    if (slides.length < 10) {
+        totSlide.textContent = `0${slides.length}`;
         curSlide.textContent = `0${slideIndex}`;
     } else {
-        totSlide.textContent = imgsSlide.length;
+        totSlide.textContent = slides.length;
         curSlide.textContent = slideIndex;
     }
 
-    slidesField.style.width = 100 * imgsSlide.length + '%';
+    slidesField.style.width = 100 * slides.length + '%';
     slidesField.style.display = 'flex';
     slidesField.style.transition = '0.5s all';
 
     slidesWrapper.style.overflow = 'hidden';
-    imgsSlide.forEach(slide => slide.style.width = width);
+    slides.forEach(slide => slide.style.width = width);
+
+    slider.style.position = 'relative';
+
+    const indicators = document.createElement('ol'),
+        dots = [];
+
+    indicators.classList.add('carousel-indicators');
+    indicators.style.cssText = `
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 15;
+        display: flex;
+        justify-content: center;
+        margin-right: 15%;
+        margin-left: 15%;
+        list-style: none;
+    `;
+
+    slider.append(indicators);
+
+    for (let i = 0; i < slides.length; i++) {
+        const dot = document.createElement('li');
+        dot.setAttribute('data-slide-to', i + 1);
+        dot.style.cssText = `
+            box-sizing: content-box;
+            flex: 0 1 auto;
+            width: 30px;
+            height: 6px;
+            margin-right: 3px;
+            margin-left: 3px;
+            cursor: pointer;
+            background-color: #fff;
+            background-clip: padding-box;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            opacity: .5;
+            transition: opacity .6s ease;
+        `;
+        if (i == 0) {
+            dot.style.opacity = 1;
+        }
+        indicators.append(dot);
+        dots.push(dot);
+    }
 
     nextButton.addEventListener('click', () => {
-        if (offset == +width.slice(0, width.length - 2) * (imgsSlide.length - 1)) {
+        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
             offset = 0;
         } else {
             offset += +width.slice(0, width.length - 2);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
 
-        if(slideIndex == imgsSlide.length){
+        if (slideIndex == slides.length) {
             slideIndex = 1;
         } else {
             slideIndex++;
         }
 
-        if (imgsSlide.length < 10) {
+        if (slides.length < 10) {
             curSlide.textContent = `0${slideIndex}`;
         } else {
             curSlide.textContent = slideIndex;
         }
+        dots.forEach(dot => dot.style.opacity = '.5');
+        dots[slideIndex - 1].style.opacity = 1;
     });
     prevButton.addEventListener('click', () => {
         if (offset == 0) {
-            offset = +width.slice(0, width.length - 2) * (imgsSlide.length - 1);
+            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
         } else {
             offset -= +width.slice(0, width.length - 2);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
 
-        if(slideIndex == 1){
-            slideIndex = imgsSlide.length;
+        if (slideIndex == 1) {
+            slideIndex = slides.length;
         } else {
             slideIndex--;
         }
 
-        if (imgsSlide.length < 10) {
+        if (slides.length < 10) {
             curSlide.textContent = `0${slideIndex}`;
         } else {
             curSlide.textContent = slideIndex;
         }
+        dots.forEach(dot => dot.style.opacity = '.5');
+        dots[slideIndex - 1].style.opacity = 1;
     });
+
+    dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            const slideTo = e.target.getAttribute('data-slide-to');
+            
+            slideIndex = slideTo;
+            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            slidesField.style.transform = `translateX(-${offset}px)`;
+
+            if (slides.length < 10) {
+                curSlide.textContent = `0${slideIndex}`;
+            } else {
+                curSlide.textContent = slideIndex;
+            }
+
+            dots.forEach(dot => dot.style.opacity = '.5');
+            dots[slideIndex - 1].style.opacity = 1;
+
+        });
+    });
+
     //end   
 });
