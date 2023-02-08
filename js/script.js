@@ -584,10 +584,10 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     nextButton.addEventListener('click', () => {
-        if (offset == +width.replace(/\D/g, '') * (slides.length - 1)) {
+        if (offset == getWidth(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += +width.replace(/\D/g, '');
+            offset += getWidth(width);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -598,14 +598,13 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         curSlideIndex(slideIndex);
-        dots.forEach(dot => dot.style.opacity = '.5');
-        dots[slideIndex - 1].style.opacity = 1;
+        dotsChange();
     });
     prevButton.addEventListener('click', () => {
         if (offset == 0) {
-            offset = +width.replace(/\D/g, '') * (slides.length - 1);
+            offset = getWidth(width) * (slides.length - 1);
         } else {
-            offset -= +width.replace(/\D/g, '');
+            offset -= getWidth(width);
         }
         slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -616,8 +615,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
 
         curSlideIndex(slideIndex);
-        dots.forEach(dot => dot.style.opacity = '.5');
-        dots[slideIndex - 1].style.opacity = 1;
+        dotsChange();
     });
 
     dots.forEach(dot => {
@@ -625,12 +623,11 @@ window.addEventListener("DOMContentLoaded", () => {
             const slideTo = e.target.getAttribute('data-slide-to');
 
             slideIndex = slideTo;
-            offset = +width.replace(/\D/g, '') * (slideTo - 1);
+            offset = getWidth(width) * (slideTo - 1);
             slidesField.style.transform = `translateX(-${offset}px)`;
 
             curSlideIndex(slideIndex);
-            dots.forEach(dot => dot.style.opacity = '.5');
-            dots[slideIndex - 1].style.opacity = 1;
+            dotsChange();
         });
     });
 
@@ -642,5 +639,13 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function dotsChange() {
+        dots.forEach(dot => dot.style.opacity = '.5');
+        dots[slideIndex - 1].style.opacity = 1;
+    }
+
+    function getWidth(value) {
+        return +value.replace(/\D/g, '');
+    }
     //end   
 });
