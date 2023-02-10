@@ -1,6 +1,5 @@
-function timer() {
-    const deadline = '2023-02-27',
-        discount = '20%';
+function timer(id, deadline) {
+    const discount = '22%';
     let discountMonth;
     switch (+deadline.split('-')[1]) {
         case 1:
@@ -91,7 +90,7 @@ function timer() {
             return num;
         }
     }
-    setClock('.timer', deadline);
+    setClock(id, deadline);
 }
 
 export default timer;
