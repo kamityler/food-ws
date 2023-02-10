@@ -3,7 +3,7 @@ import {
     openModal
 } from './modal';
 
-function forms() {
+function forms(modalTimerId) {
     const forms = document.querySelectorAll('form');
     const message = {
         loading: 'img/spinner.svg',
@@ -59,7 +59,7 @@ function forms() {
     function showMyModal(message) {
         const prevModal = document.querySelector('.modal__dialog');
         prevModal.classList.add('hide');
-        openModal();
+        openModal('.modal', modalTimerId);
         const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
         thanksModal.innerHTML = `
@@ -73,7 +73,7 @@ function forms() {
             thanksModal.remove();
             prevModal.classList.add('show');
             prevModal.classList.remove('hide');
-            closeModal();
+            closeModal('.modal');
         }, 4000);
     }
 }
