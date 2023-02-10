@@ -1,11 +1,15 @@
 'use strict';
+const myModule = require('./main');
 
+const myModuleInstance = new myModule();
+myModuleInstance.hello();
+myModuleInstance.goodBye();
 
 window.addEventListener('DOMContentLoaded', () => {
 
 
     // tabs
-    const tabs = document.querySelectorAll('.tabheader__item'),
+    const tabs = document.querySelectorAll('.tabheader__i tem'),
         tabsContent = document.querySelectorAll('.tabcontent'),
         tabsParent = document.querySelector('.tabheader__items');
 
