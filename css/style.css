@@ -1,4 +1,4 @@
-/* @import url(https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic-ext); */
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap&subset=cyrillic-ext);
 
 * {
     box-sizing: border-box;
@@ -12,8 +12,8 @@ a {
 }
 
 .btn {
-    width: 150px;
-    height: fit-content;
+    width: 220px;
+    height: 65px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -723,29 +723,17 @@ a {
     display: none
 }
 
-.fadeHigh {
-    animation-name: fadeHigh;
-    animation-duration: .7s;
-}
-.fadeLow{
-    animation-name: fadeLow;
-    animation-duration: .3s;
+.fade {
+    animation-name: fade;
+    animation-duration: 0.45s;
 }
 
-@keyframes fadeHigh {
+@keyframes fade {
     from {
-        opacity: 0;
+        opacity: 0.1;
     }
-    to {
-        opacity: 1;
-    }
-}
 
-@keyframes fadeLow {
-    from {
-        opacity: 1;
-    }
     to {
-        opacity: 0;
+        opacity: 1;
     }
 }
