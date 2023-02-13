@@ -16,7 +16,12 @@ function forms(modalTimerId, formSelector) {
     };
 
     forms.forEach(item => {
-        bindPostData(item);
+        try {
+            bindPostData(item);
+        } catch (e) {
+            console.log(e.message);
+        }
+
     });
 
     function bindPostData(form) {

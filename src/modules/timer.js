@@ -42,6 +42,7 @@ function timer(id, deadline) {
             discountMonth = 'місяця';
             break;
     }
+
     const lastActionDate = document.querySelectorAll('.promotion__descr span');
     lastActionDate[0].innerHTML = `${discount}`;
     lastActionDate[1].innerHTML = `${deadline.split('-')[2]} ${discountMonth}`;
@@ -90,7 +91,12 @@ function timer(id, deadline) {
             return num;
         }
     }
-    setClock(id, deadline);
+
+    try {
+        setClock(id, deadline);
+    } catch (e) {
+        console.log(e.message);
+    }
 }
 
 export default timer;

@@ -4,19 +4,37 @@ function calculator() {
 
     let sex, height, weight, age, ratio;
 
-    if (localStorage.getItem('sex')) {
-        sex = localStorage.getItem('sex');
-    } else {
-        sex = 'female';
-        localStorage.setItem('sex', 'female');
+    try {
+        if (localStorage.getItem('sex')) {
+            sex = localStorage.getItem('sex');
+        } else {
+            sex = 'female';
+            localStorage.setItem('sex', 'female');
+        }
+
+        if (localStorage.getItem('ratio')) {
+            ratio = localStorage.getItem('ratio');
+        } else {
+            ratio = '1.375';
+            localStorage.setItem('ratio', '1.375');
+        }
+    } catch (e) {
+        console.log(e.message);
     }
 
-    if (localStorage.getItem('ratio')) {
-        ratio = localStorage.getItem('ratio');
-    } else {
-        ratio = '1.375';
-        localStorage.setItem('ratio', '1.375');
+    try {
+        initLocalSettings('#gender div', 'calculating__choose-item_active');
+        initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
+        calcTotal();
+        getStaticInfo('#gender div', 'calculating__choose-item_active');
+        getStaticInfo('.calculating__choose_big div', 'calculating__choose-item_active');
+        getDynamicInfo('#height');
+        getDynamicInfo('#weight');
+        getDynamicInfo('#age');
+    } catch (e) {
+        console.log(e.message);
     }
+
 
     function initLocalSettings(selector, activeClass) {
         const elements = document.querySelectorAll(selector);
@@ -31,9 +49,6 @@ function calculator() {
         });
     }
 
-    initLocalSettings('#gender div', 'calculating__choose-item_active');
-    initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
-
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
             result.textContent = '____';
@@ -45,8 +60,6 @@ function calculator() {
             result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (age * 5.7)) * ratio);
         }
     }
-
-    calcTotal();
 
     function getStaticInfo(selector, activeClass) {
         const elements = document.querySelectorAll(selector);
@@ -67,9 +80,6 @@ function calculator() {
             });
         });
     }
-
-    getStaticInfo('#gender div', 'calculating__choose-item_active');
-    getStaticInfo('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function getDynamicInfo(selector) {
         const input = document.querySelector(selector);
@@ -96,10 +106,6 @@ function calculator() {
             calcTotal();
         });
     }
-
-    getDynamicInfo('#height');
-    getDynamicInfo('#weight');
-    getDynamicInfo('#age');
 }
 
 export default calculator;

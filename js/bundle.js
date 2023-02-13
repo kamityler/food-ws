@@ -30,19 +30,37 @@ function calculator() {
 
     let sex, height, weight, age, ratio;
 
-    if (localStorage.getItem('sex')) {
-        sex = localStorage.getItem('sex');
-    } else {
-        sex = 'female';
-        localStorage.setItem('sex', 'female');
+    try {
+        if (localStorage.getItem('sex')) {
+            sex = localStorage.getItem('sex');
+        } else {
+            sex = 'female';
+            localStorage.setItem('sex', 'female');
+        }
+
+        if (localStorage.getItem('ratio')) {
+            ratio = localStorage.getItem('ratio');
+        } else {
+            ratio = '1.375';
+            localStorage.setItem('ratio', '1.375');
+        }
+    } catch (e) {
+        console.log(e.message);
     }
 
-    if (localStorage.getItem('ratio')) {
-        ratio = localStorage.getItem('ratio');
-    } else {
-        ratio = '1.375';
-        localStorage.setItem('ratio', '1.375');
+    try {
+        initLocalSettings('#gender div', 'calculating__choose-item_active');
+        initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
+        calcTotal();
+        getStaticInfo('#gender div', 'calculating__choose-item_active');
+        getStaticInfo('.calculating__choose_big div', 'calculating__choose-item_active');
+        getDynamicInfo('#height');
+        getDynamicInfo('#weight');
+        getDynamicInfo('#age');
+    } catch (e) {
+        console.log(e.message);
     }
+
 
     function initLocalSettings(selector, activeClass) {
         const elements = document.querySelectorAll(selector);
@@ -57,9 +75,6 @@ function calculator() {
         });
     }
 
-    initLocalSettings('#gender div', 'calculating__choose-item_active');
-    initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
-
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
             result.textContent = '____';
@@ -71,8 +86,6 @@ function calculator() {
             result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (age * 5.7)) * ratio);
         }
     }
-
-    calcTotal();
 
     function getStaticInfo(selector, activeClass) {
         const elements = document.querySelectorAll(selector);
@@ -93,9 +106,6 @@ function calculator() {
             });
         });
     }
-
-    getStaticInfo('#gender div', 'calculating__choose-item_active');
-    getStaticInfo('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function getDynamicInfo(selector) {
         const input = document.querySelector(selector);
@@ -122,10 +132,6 @@ function calculator() {
             calcTotal();
         });
     }
-
-    getDynamicInfo('#height');
-    getDynamicInfo('#weight');
-    getDynamicInfo('#age');
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (calculator);
@@ -241,7 +247,12 @@ function forms(modalTimerId, formSelector) {
     };
 
     forms.forEach(item => {
-        bindPostData(item);
+        try {
+            bindPostData(item);
+        } catch (e) {
+            console.log(e.message);
+        }
+
     });
 
     function bindPostData(form) {
@@ -375,7 +386,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function slider({container, slide, nextArrow, prevArrow, totCounter, curCounter, wrapper, field}) {
+function slider({
+    container,
+    slide,
+    nextArrow,
+    prevArrow,
+    totCounter,
+    curCounter,
+    wrapper,
+    field
+}) {
 
     const slider = document.querySelector(container),
         prevButton = slider.querySelector(prevArrow),
@@ -415,17 +435,17 @@ function slider({container, slide, nextArrow, prevArrow, totCounter, curCounter,
 
     indicators.classList.add('carousel-indicators');
     indicators.style.cssText = `
-position: absolute;
-right: 0;
-bottom: 0;
-left: 0;
-z-index: 15;
-display: flex;
-justify-content: center;
-margin-right: 15%;
-margin-left: 15%;
-list-style: none;
-`;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 15;
+        display: flex;
+        justify-content: center;
+        margin-right: 15%;
+        margin-left: 15%;
+        list-style: none;
+    `;
 
     slider.append(indicators);
 
@@ -433,20 +453,20 @@ list-style: none;
         const dot = document.createElement('li');
         dot.setAttribute('data-slide-to', i + 1);
         dot.style.cssText = `
-    box-sizing: content-box;
-    flex: 0 1 auto;
-    width: 30px;
-    height: 6px;
-    margin-right: 3px;
-    margin-left: 3px;
-    cursor: pointer;
-    background-color: #fff;
-    background-clip: padding-box;
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    opacity: .5;
-    transition: opacity .6s ease;
-`;
+            box-sizing: content-box;
+            flex: 0 1 auto;
+            width: 30px;
+            height: 6px;
+            margin-right: 3px;
+            margin-left: 3px;
+            cursor: pointer;
+            background-color: #fff;
+            background-clip: padding-box;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            opacity: .5;
+            transition: opacity .6s ease;
+        `;
         if (i == 0) {
             dot.style.opacity = 1;
         }
@@ -714,7 +734,6 @@ function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass
         tabsParent = document.querySelector(tabsParentSelector);
 
     function hideTabContent() {
-
         tabsContent.forEach(item => {
             item.classList.add('hide');
             item.classList.remove('show', 'fade');
@@ -731,20 +750,26 @@ function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass
         tabs[i].classList.add(activeClass);
     }
 
-    hideTabContent();
-    showTabContent();
+    try {
+        hideTabContent();
+        showTabContent();
+        tabsParent.addEventListener('click', function (event) {
+            const target = event.target;
+            if (target && target.classList.contains(tabsSelector.slice(1))) {
+                tabs.forEach((item, i) => {
+                    if (target == item) {
+                        hideTabContent();
+                        showTabContent(i);
+                    }
+                });
+            }
+        });
+    } catch (e) {
+        console.log(e.stack);
+        console.log(e.message);
+        console.log(e.name);
+    }
 
-    tabsParent.addEventListener('click', function (event) {
-        const target = event.target;
-        if (target && target.classList.contains(tabsSelector.slice(1))) {
-            tabs.forEach((item, i) => {
-                if (target == item) {
-                    hideTabContent();
-                    showTabContent(i);
-                }
-            });
-        }
-    });
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tabs);
@@ -806,6 +831,7 @@ function timer(id, deadline) {
             discountMonth = 'місяця';
             break;
     }
+
     const lastActionDate = document.querySelectorAll('.promotion__descr span');
     lastActionDate[0].innerHTML = `${discount}`;
     lastActionDate[1].innerHTML = `${deadline.split('-')[2]} ${discountMonth}`;
@@ -854,7 +880,12 @@ function timer(id, deadline) {
             return num;
         }
     }
-    setClock(id, deadline);
+
+    try {
+        setClock(id, deadline);
+    } catch (e) {
+        console.log(e.message);
+    }
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (timer);
@@ -5017,8 +5048,6 @@ window.addEventListener('DOMContentLoaded', () => {
     (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_5__["default"])('.tabheader__item', '.tabcontent', '.tabheader__items', 'tabheader__item_active');
     (0,_modules_timer__WEBPACK_IMPORTED_MODULE_6__["default"])('.timer', '2023-02-27');
 });
-
-// o t
 })();
 
 /******/ })()
