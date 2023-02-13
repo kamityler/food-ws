@@ -17,7 +17,7 @@ function cards() {
         changeToUAH() {
             this.price = this.price * this.transfer;
         }
-
+         
         render() {
             const element = document.createElement('div');
             if (this.classes.length == 0) {
