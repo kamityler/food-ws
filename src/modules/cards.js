@@ -1,4 +1,3 @@
-//import axios from './axios/lib/axios';
 import axios from './axios/index';
 
 function cards() {

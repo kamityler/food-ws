@@ -144,7 +144,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _axios_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./axios/index */ "./src/modules/axios/lib/axios.js");
-//import axios from './axios/lib/axios';
 
 
 function cards() {
