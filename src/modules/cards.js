@@ -60,7 +60,7 @@ function cards() {
         });
     } catch (error) {
         console.log('error in cards.js axios');
-        console.log(error.stack);
+        console.log(error.stack );
     }
 
 }
