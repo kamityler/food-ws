@@ -1,4 +1,4 @@
-import axios from './axios/index';
+import 'axios';
 
 function cards() {
     class FoodCard {
