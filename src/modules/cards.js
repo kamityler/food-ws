@@ -1,3 +1,6 @@
+//import axios from './axios/lib/axios';
+import axios from './axios/index';
+
 function cards() {
     class FoodCard {
         constructor(picture, alt, title, descr, price, parentSelector, ...classes) {
@@ -44,17 +47,23 @@ function cards() {
         }
     }
 
-    axios.get('http://localhost:3000/menu').then(obj => {
-        obj.data.forEach(({
-            img,
-            altimg,
-            title,
-            descr,
-            price
-        }) => {
-            new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
+    try {
+        axios.get('http://localhost:3000/menu').then(obj => {
+            obj.data.forEach(({
+                img,
+                altimg,
+                title,
+                descr,
+                price
+            }) => {
+                new FoodCard(img, altimg, title, descr, price, '.menu .container').render();
+            });
         });
-    });
+    } catch (error) {
+        console.log('error in cards.js axios');
+        console.log(error.stack);
+    }
+
 }
 
 export default cards;
