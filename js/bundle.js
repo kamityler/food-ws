@@ -765,7 +765,7 @@ function tabs(tabsSelector, tabsContentSelector, tabsParentSelector, activeClass
             }
         });
     } catch (e) {
-        console.log(e.stack);
+        console.error(e.stack);
         console.log(e.message);
         console.log(e.name);
     }
